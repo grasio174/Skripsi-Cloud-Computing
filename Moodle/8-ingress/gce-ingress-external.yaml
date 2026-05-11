@@ -1,0 +1,26 @@
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: moodle-ingress
+  namespace: moodle
+  annotations:
+    # kubernetes.io/ingress.class: "gce"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    spec.ingressClassName: "gce"
+    kubernetes.io/ingress.global-static-ip-name: "moodle-ingress-ip"
+    networking.gke.io/managed-certificates: "moodle-google-managed-certificate"
+    networking.gke.io/v1beta1.FrontendConfig: "moodle-ingress-frontendconfig-https"
+spec:
+  rules:
+  - host: grasiomoodle.my.id
+    http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: moodle
+            port:
+              number: 80

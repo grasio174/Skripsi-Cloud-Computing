@@ -1,0 +1,33 @@
+
+---
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: ingress-backendconfig
+  namespace: moodle
+spec:
+  timeoutSec: 300
+  connectionDraining:
+    drainingTimeoutSec: 10
+  healthCheck:
+    checkIntervalSec: 10
+    timeoutSec: 10
+    port: 8080
+    type: HTTP
+    requestPath: /healthz
+  logging:
+    enable: false
+    sampleRate: 0.1 
+  cdn:
+    enabled: true
+    cachePolicy:
+      includeHost: true
+      includeProtocol: true
+      includeQueryString: true
+  #     queryStringBlacklist: ""
+  #     queryStringWhitelist: ""
+  # to uncoment when gke >= 1.23.3-gke.900
+    cacheMode: CACHE_ALL_STATIC
+    clientTtl: 3600
+    defaultTtl: 3600
+    maxTtl: 86400
